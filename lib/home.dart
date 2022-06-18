@@ -2,6 +2,7 @@
 
 import 'package:firebase_examples/login.dart';
 import 'package:firebase_examples/register.dart';
+import 'package:firebase_examples/users.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -30,6 +31,14 @@ class Home extends StatelessWidget {
                    Navigator.push(context, MaterialPageRoute(builder: (context) => const Login(),));
               },
               child: const Text("Login"),
+            ),
+          ),
+           Center(
+            child: ElevatedButton(
+              onPressed: () {
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => const Users(),));
+              },
+              child: const Text("Users"),
             ),
           ),
         ],

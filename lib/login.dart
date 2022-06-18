@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class Login extends StatefulWidget {
@@ -18,9 +19,25 @@ class _LoginState extends State<Login> {
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.green,
-        content: Text(message??"",style: const TextStyle(color: Colors.white),),
+        content: Text(
+          message ?? "",
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
     );
+  }
+
+  loginWithGoogle() async {
+    try {
+      final googleUser = await GoogleSignIn().signIn();
+      final auth = await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+          accessToken: auth?.accessToken, idToken: auth?.idToken);
+      return FirebaseAuth.instance.signInWithCredential(credential);
+      
+    } catch (e) {
+      print("OOPS $e");
+    }
   }
 
   login() async {
@@ -89,6 +106,23 @@ class _LoginState extends State<Login> {
                   child: const Text("Sign In"),
                   onPressed: () {
                     login();
+                  },
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                width: double.infinity,
+                height: 65,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12))),
+                  child: const Text("Sign In With Google"),
+                  onPressed: () {
+                    loginWithGoogle();
                   },
                 ),
               ),
